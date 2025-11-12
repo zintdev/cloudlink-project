@@ -1,0 +1,31 @@
+import axios from 'axios';
+
+// Cấu hình URL cơ sở cho Backend.
+// React (chạy ở 5173) sẽ gọi Backend (chạy ở 8080)
+const API_BASE_URL = 'http://localhost:8080/';
+
+// Tạo một "instance" của axios
+const apiClient = axios.create({
+    baseURL: API_BASE_URL,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
+/**
+ * Gọi API POST /api/v1/links để tạo link ngắn
+ * @param {string} originalUrl - Link gốc người dùng nhập vào
+ * @returns {Promise<object>} - Dữ liệu trả về từ API (gồm shortLink, originalUrl)
+ */
+export const createShortLink = (originalUrl) => {
+    // Dữ liệu gửi đi, khớp với DTO CreateLinkRequest
+    const payload = {
+        originalUrl: originalUrl 
+    };
+    
+    // Trả về một Promise
+    return apiClient.post('/api/v1/links', payload);
+};
+
+// (Trong tương lai, chúng ta sẽ thêm các hàm khác vào đây)
+// export const getLinkStats = (shortCode) => ...
