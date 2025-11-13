@@ -13,6 +13,7 @@ import com.zintdev.cloudlink_backend.repository.ClickRepository;
 import com.zintdev.cloudlink_backend.repository.ShortLinkRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value; // <-- THÊM DÒNG NÀY
 
 @Service // Báo cho Spring biết đây là một lớp Logic
 @RequiredArgsConstructor // Lombok: Tự động @Autowired cho các trường 'final'
@@ -22,8 +23,8 @@ public class LinkService {
     private final ShortLinkRepository shortLinkRepository;
     private final ClickRepository clickRepository;
 
-    // Bạn có thể chuyển cái này ra file application.properties sau
-    private final String BASE_URL = "http://zint.com/"; 
+    @Value("${APP_BASE_URL}") // Lấy giá trị từ application.properties
+    private String appBaseUrl;
     
     private static final int SHORT_CODE_LENGTH = 6;
     private static final String ALPHANUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -48,7 +49,7 @@ public class LinkService {
         shortLinkRepository.save(newLink);
 
         // Trả về DTO cho người dùng
-        return new ShortLinkResponse(newLink.getId(), BASE_URL + shortCode, request.getOriginalUrl(), 0L);
+        return new ShortLinkResponse(newLink.getId(), appBaseUrl + "/" + shortCode, request.getOriginalUrl(), 0L);
     }
 
     // Hàm private để tạo mã ngẫu nhiên
@@ -77,7 +78,7 @@ public class LinkService {
         ShortLinkResponse dto = new ShortLinkResponse();
         dto.setId(link.getId());
         dto.setOriginalUrl(link.getOriginalUrl());
-        dto.setShortLink(BASE_URL + link.getShortCode());
+        dto.setShortLink(appBaseUrl + "/" + link.getShortCode());
         dto.setClickCount(count); // Gán số click
         
         return dto;
