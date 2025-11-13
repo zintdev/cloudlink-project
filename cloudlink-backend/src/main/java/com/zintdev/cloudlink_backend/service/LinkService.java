@@ -1,12 +1,15 @@
 package com.zintdev.cloudlink_backend.service;
 
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.zintdev.cloudlink_backend.domain.entity.ShortLink;
 import com.zintdev.cloudlink_backend.dto.CreateLinkRequest;
 import com.zintdev.cloudlink_backend.dto.ShortLinkResponse;
+import com.zintdev.cloudlink_backend.repository.ClickRepository;
 import com.zintdev.cloudlink_backend.repository.ShortLinkRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ public class LinkService {
 
     // Dependency Injection (DI)
     private final ShortLinkRepository shortLinkRepository;
+    private final ClickRepository clickRepository;
 
     // Bạn có thể chuyển cái này ra file application.properties sau
     private final String BASE_URL = "http://zint.com/"; 
@@ -44,7 +48,7 @@ public class LinkService {
         shortLinkRepository.save(newLink);
 
         // Trả về DTO cho người dùng
-        return new ShortLinkResponse(BASE_URL + shortCode, request.getOriginalUrl());
+        return new ShortLinkResponse(newLink.getId(), BASE_URL + shortCode, request.getOriginalUrl(), 0L);
     }
 
     // Hàm private để tạo mã ngẫu nhiên
@@ -54,5 +58,28 @@ public class LinkService {
             sb.append(ALPHANUMERIC.charAt(random.nextInt(ALPHANUMERIC.length())));
         }
         return sb.toString();
+    }
+
+    public List<ShortLinkResponse> getAllLinks() {
+        // Lấy tất cả link từ CSDL
+        List<ShortLink> links = shortLinkRepository.findAll();
+        
+        // Chuyển đổi (map) từ Entity sang DTO
+        return links.stream()
+                .map(this::mapToShortLinkResponse) // Dùng hàm private bên dưới
+                .collect(Collectors.toList());
+    }
+
+    private ShortLinkResponse mapToShortLinkResponse(ShortLink link) {
+        // Đếm số click cho link này
+        Long count = clickRepository.countByShortLinkId(link.getId());
+        
+        ShortLinkResponse dto = new ShortLinkResponse();
+        dto.setId(link.getId());
+        dto.setOriginalUrl(link.getOriginalUrl());
+        dto.setShortLink(BASE_URL + link.getShortCode());
+        dto.setClickCount(count); // Gán số click
+        
+        return dto;
     }
 }

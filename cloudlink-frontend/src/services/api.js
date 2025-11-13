@@ -27,5 +27,13 @@ export const createShortLink = (originalUrl) => {
     return apiClient.post('/api/v1/links', payload);
 };
 
+/**
+ * Gọi API GET /api/v1/links để lấy tất cả link
+ * @returns {Promise<Array>} - Một mảng các link (với clickCount)
+ */
+export const getAllLinks = () => {
+    return apiClient.get('/api/v1/links');
+};
+
 // (Trong tương lai, chúng ta sẽ thêm các hàm khác vào đây)
 // export const getLinkStats = (shortCode) => ...

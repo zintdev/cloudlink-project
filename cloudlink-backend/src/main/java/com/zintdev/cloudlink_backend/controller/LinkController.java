@@ -1,6 +1,9 @@
 package com.zintdev.cloudlink_backend.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,4 +34,10 @@ public class LinkController {
         ShortLinkResponse response = linkService.createShortLink(request);
         return ResponseEntity.ok(response);
     }
+    @GetMapping
+    public ResponseEntity<List<ShortLinkResponse>> getAllLinks() {
+        List<ShortLinkResponse> links = linkService.getAllLinks();
+        return ResponseEntity.ok(links);
+    }
+
 }
