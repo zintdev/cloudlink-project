@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor // Lombok: Tự tạo constructor với tất cả các tham số
 public class ShortLinkResponse {
-    
+    private Long id;
     // (ví dụ: "http://zint.com/AbC12")
     private String shortLink; 
-    
     private String originalUrl;
+    private Long clickCount;
 }
