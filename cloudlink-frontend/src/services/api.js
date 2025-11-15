@@ -2,6 +2,7 @@ import axios from 'axios';
 
 // Cấu hình URL cơ sở cho Backend.
 // React (chạy ở 5173) sẽ gọi Backend (chạy ở 8080)
+// force update
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Tạo một "instance" của axios
