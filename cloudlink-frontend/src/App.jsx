@@ -1,22 +1,35 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom'; // Outlet là nơi các trang con (Home, Dashboard) hiển thị
+import { Outlet, NavLink } from 'react-router-dom';
+import './App.css';
 
 function App() {
   return (
-    <div className="App" style={{ padding: '20px' }}>
-      
-      {/* 1. Thanh điều hướng chung */}
-      <nav style={{ marginBottom: '20px', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
-        <Link to="/" style={{ marginRight: '15px', fontSize: '18px' }}>Trang chủ (Tạo link)</Link>
-        <Link to="/dashboard" style={{ fontSize: '18px' }}>Dashboard (Quản lý)</Link>
+    <div className="app-shell">
+      <nav className="navbar">
+        <NavLink to="/" className="nav-brand">
+          <span>CL</span>
+          CloudLink
+        </NavLink>
+        <div className="nav-links">
+          <NavLink
+            to="/"
+            className={({ isActive }) => `nav-link${isActive ? ' is-active' : ''}`}
+            end
+          >
+            Trang chủ
+          </NavLink>
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) => `nav-link${isActive ? ' is-active' : ''}`}
+          >
+            Dashboard
+          </NavLink>
+        </div>
       </nav>
 
-      {/* 2. Nơi các trang con (HomePage, DashboardPage) sẽ được "nhét" vào */}
-      <main>
+      <main className="page-container">
         <Outlet />
       </main>
-
-      {/* (Bạn có thể thêm Footer chung ở đây) */}
     </div>
   );
 }
