@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from './App' // 'App' sẽ là layout chung
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
-// import './index.css'
+import './index.css';
 
 // Cấu hình Router
 const router = createBrowserRouter([
